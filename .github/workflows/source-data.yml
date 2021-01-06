@@ -1,4 +1,5 @@
 name: Source data
+on:
   schedule:
     - cron: '* 3 * * *'
 jobs:
