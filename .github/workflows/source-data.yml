@@ -1,0 +1,17 @@
+name: Source data
+  schedule:
+    - cron: '* 3 * * *'
+jobs:
+  name: Hash current data
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Compute hash
+      id: hashsum
+      run: |
+        echo ::set-output name=hash::${{ hashFiles('data/DE.tab') }}
+    - name: Print hash
+      run: echo "${ steps.hashsum.outputs.hash }"
+
+
