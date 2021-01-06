@@ -5948,7 +5948,19 @@ matches:
   - trigger: ":39261"
     replace: "39261 Zerbst/Anhalt"
   - trigger: ":39264"
-    replace: "39264 Bias"
+    form: "{{places}}"
+    form_fields:
+      places:
+        type: choice
+        values:
+          - "39264 Bias"
+          - "39264 Bornum b. Zerbst"
+          - "39264 Buhlendorf"
+          - "39264 Deetz b. Zerbst"
+          - "39264 Dobritz"
+          - "39264 Dornburg/Elbe"
+          - "39264 Gehrden b. Zerbst"
+          - "etc."
   - trigger: ":39279"
     replace: "39279 Hobeck"
   - trigger: ":39288"
