@@ -25,5 +25,13 @@ jobs:
           location: 'data/tmp'
       - name: Print file path
         run: echo "Find the data at ${{ steps.download.outputs.file-path }}"
+      - name: Print hash
+        run: sha256sum "${{ steps.download.outputs.file-path }}"
+      - name: Compare hashes
+        working-directory: "data/tmp"
+        run: |
+          if [[ ! sha256sum --check --status  ]]; then
+            echo "Move updated file to repo version."
+          fi
 
 
