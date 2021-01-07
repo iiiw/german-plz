@@ -13,6 +13,6 @@ jobs:
         id: hashsum
         run: echo "::set-output name=HASH::$(sha256sum data/DE.tab)"
       - name: Print hash
-        run: echo "${{ steps.hashsum.HASH }}"
+        run: echo "${{ steps.hashsum.outputs.HASH }}"
 
 
