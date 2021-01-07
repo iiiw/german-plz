@@ -21,18 +21,14 @@ jobs:
         id: hashsum
         working-directory: 'data/tmp'
         run: |
-          pwd
-          ls -laH
           HASH="$(sha256sum DE.tab)"
           echo "$HASH"
           echo "::set-output name=hash::${HASH}"
       - name: Compare hashes
         working-directory: 'data'
         run: |
-          pwd
-          ls -laH . tmp
           if [[ -f "DE.tab" ]] \
-            && sha256sum --check --status "${{ steps.hashsum.outputs.hash }}"; then
+            && sha256sum --check --status ${{ steps.hashsum.outputs.hash }}; then
             echo "Should be the same file!"
           else
             echo "Move updated file to repo location."
