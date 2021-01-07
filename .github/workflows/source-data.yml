@@ -7,7 +7,7 @@ jobs:
   get_hash:
     runs-on: ubuntu-latest
     outputs:
-      256sum: ${{ steps.hashsum.outputs.hash }}
+      sha256: ${{ steps.hashsum.outputs.hash }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
       - name: Compare hashes
         working-directory: 'data/tmp'
         run: |
-          if ! sha256sum --check --status "${{ needs.get_hash.outputs.256sum }}"; then
+          if ! sha256sum --check --status "${{ needs.get_hash.outputs.sha256 }}"; then
             echo "Move updated file to repo version."
           else
             echo "Should be the same file!"
