@@ -10,8 +10,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Compute hash
+        working-directory: 'data'
         id: hashsum
-        run: echo "::set-output name=HASH::$(sha256sum data/DE.tab)"
+        run: echo "::set-output name=HASH::$(sha256sum DE.tab)"
       - name: Print hash
         run: echo "${{ steps.hashsum.outputs.HASH }}"
   get_data:
@@ -28,9 +29,9 @@ jobs:
       - name: Print hash
         run: sha256sum "${{ steps.download.outputs.file-path }}"
       - name: Compare hashes
-        working-directory: "data/tmp"
+        working-directory: 'data/tmp'
         run: |
-          if [[ ! sha256sum --check --status  ]]; then
+          if ! sha256sum --check --status; then
             echo "Move updated file to repo version."
           fi
 
