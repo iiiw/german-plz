@@ -15,20 +15,18 @@ jobs:
         with:
           file-url: 'http://www.fa-technik.adfc.de/code/opengeodb/DE.tab'
           location: 'data/tmp'
-      - name: Print file path
-        run: echo "Find the data at ${{ steps.download.outputs.file-path }}"
       - name: Compute hash
         id: hashsum
         working-directory: 'data/tmp'
         run: |
           HASH="$(sha256sum DE.tab)"
-          echo "$HASH"
           echo "::set-output name=hash::${HASH}"
       - name: Compare hashes
         working-directory: 'data'
         run: |
           if [[ -f "DE.tab" ]] \
-            && sha256sum --check --status ${{ steps.hashsum.outputs.hash }}; then
+            && echo ${{ steps.hashsum.outputs.hash }} \
+                | sha256sum --check --status; then
             echo "Should be the same file!"
           else
             echo "Move updated file to repo location."
