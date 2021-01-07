@@ -14,5 +14,16 @@ jobs:
         run: echo "::set-output name=HASH::$(sha256sum data/DE.tab)"
       - name: Print hash
         run: echo "${{ steps.hashsum.outputs.HASH }}"
+  get_data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download data file
+        uses: carlosperate/download-file-action@v1.0.3
+        id: download
+        with:
+          file-url: 'http://www.fa-technik.adfc.de/code/opengeodb/DE.tab'
+          location: 'data/tmp'
+      - name: Print file path
+        run: echo "Find the data at ${{ steps.download.outputs.file-path }}"
 
 
