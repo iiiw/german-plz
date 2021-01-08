@@ -4,30 +4,46 @@ on:
   schedule:
     - cron: '* 3 * * *'
 jobs:
-  update_dataset:
+  update:
     runs-on: ubuntu-latest
+    outputs:
+      need-update: ${{ steps.update_check.outputs.UPDATE_FLAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Download data file
-        uses: carlosperate/download-file-action@v1.0.3
         id: download
+        uses: carlosperate/download-file-action@v1.0.3
         with:
           file-url: 'http://www.fa-technik.adfc.de/code/opengeodb/DE.tab'
           location: 'data/tmp'
-      - name: Compute hash
-        id: hashsum
+      - name: Check for update
+        id: update_check
         working-directory: 'data/tmp'
         run: |
-          HASH="$(sha256sum DE.tab)"
-          echo "::set-output name=hash::${HASH}"
-      - name: Compare hashes
+            sha256sum --check --status ../DE.tab.sha256 \
+              &&  { echo "::set-output name=UPDATE_FLAG::${{ false }}" || exit 1 }
+              || echo "::set-output name=UPDATE_FLAG::${{ true }}"
+      - name: Restore hash
+        if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
-        run: |
-          if [[ -f "DE.tab" ]] \
-            && echo ${{ steps.hashsum.outputs.hash }} \
-                | sha256sum --check --status; then
-            echo "Should be the same file!"
-          else
-            echo "Move updated file to repo location."
-          fi
+        run: sha256sum tmp/DE.tab > DE.tab.sha256
+      - name: Upload data file
+        if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: plz-data
+          path: "${{ steps.download.outputs.file-path }}"
+          retention-days: 1
+      #- name: Push hash
+        ## actually, this should run at the very end, when the build succeeds
+        #if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
+        #run: |
+          #git config --global user.name "github-actions[bot]"
+          #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          #git add data/DE.tab.sha256
+          #git commit -m 'Regenerate checksum file'
+          #git push
+        #with:
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+
