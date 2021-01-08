@@ -1,5 +1,8 @@
 name: lint-yaml
-on: [push, pull_request]
+on: pull_request
+on:
+  workflow_run:
+    workflows: []
 jobs:
   run-linter:
     runs-on: ubuntu-latest
