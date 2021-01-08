@@ -22,10 +22,10 @@ jobs:
         working-directory: 'data/tmp'
         run: |
             sha256sum --check --status ../DE.tab.sha256 \
-              && { echo "::set-output name=UPDATE_FLAG::false" || exit 1; } \
+              && { echo '::set-output name=UPDATE_FLAG::${{ false }}' || exit 1; } \
               || echo "::set-output name=UPDATE_FLAG::true"
       - name: Restore hash
-        if: ${{ steps.update_check.outputs.UPDATE_FLAG == 'true' }}
+        if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
         run: |
           sha256sum tmp/DE.tab > DE.tab.sha256
