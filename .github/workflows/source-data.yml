@@ -22,8 +22,8 @@ jobs:
         working-directory: 'data/tmp'
         run: |
             sha256sum --check --status ../DE.tab.sha256 \
-              && { echo "::set-output name=UPDATE_FLAG::${{ false }}" || exit 1; } \
-              || echo "::set-output name=UPDATE_FLAG::${{ true }}"
+              && { echo "::set-output name=UPDATE_FLAG::0" || exit 1; } \
+              || echo "::set-output name=UPDATE_FLAG::1"
       - name: Restore hash
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
