@@ -22,12 +22,14 @@ jobs:
         working-directory: 'data/tmp'
         run: |
             sha256sum --check --status ../DE.tab.sha256 \
-              && { echo "::set-output name=UPDATE_FLAG::0" || exit 1; } \
-              || echo "::set-output name=UPDATE_FLAG::1"
+              && { echo "::set-output name=UPDATE_FLAG::${{ false }}" || exit 1; } \
+              || echo "::set-output name=UPDATE_FLAG::${{ true }}"
       - name: Restore hash
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
-        run: sha256sum tmp/DE.tab > DE.tab.sha256
+        run: |
+          sha256sum tmp/DE.tab > DE.tab.sha256
+          echo ${{ steps.update_check.outputs.UPDATE_FLAG  }}
       - name: Upload data file
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         uses: actions/upload-artifact@v2
