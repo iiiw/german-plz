@@ -25,11 +25,11 @@ jobs:
               && { echo "::set-output name=UPDATE_FLAG::false" || exit 1; } \
               || echo "::set-output name=UPDATE_FLAG::true"
       - name: Restore hash
-        if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
+        if: ${{ steps.update_check.outputs.UPDATE_FLAG == 'true' }}
         working-directory: 'data'
         run: |
           sha256sum tmp/DE.tab > DE.tab.sha256
-          echo öö${{ steps.update_check.outputs.UPDATE_FLAG  }}ää
+          echo ${{ steps.update_check.outputs.UPDATE_FLAG  }}
       - name: Upload data file
         if: ${{ false }}      # ${{ steps.update_check.outputs.UPDATE_FLAG }}
         uses: actions/upload-artifact@v2
