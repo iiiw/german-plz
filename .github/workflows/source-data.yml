@@ -43,7 +43,10 @@ jobs:
     steps:
       - name: Start build
         #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
-        run: echo "Beginning of build job..."
+        run: |
+            echo "Beginning of build job..."
+            ls -R data
+
       #- name: Push checksum
         #run: |
           #git config --global user.name "github-actions[bot]"
