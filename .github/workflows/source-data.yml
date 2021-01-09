@@ -9,12 +9,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      #- name: Download data file
-        #id: download
-        #uses: carlosperate/download-file-action@v1.0.3
-        #with:
-          #file-url: 'http://www.fa-technik.adfc.de/code/opengeodb/DE.tab'
-          #location: 'data/tmp'
+      - name: Download data file
+        id: download
+        uses: carlosperate/download-file-action@v1.0.3
+        with:
+          file-url: 'http://www.fa-technik.adfc.de/code/opengeodb/DE.tab'
+          location: 'data/tmp'
       - name: Check for update
         id: update_check
         #working-directory: 'data/tmp'
