@@ -26,14 +26,14 @@ jobs:
         run: |
             #sha256sum --check --status ../DE.tab.sha256 \
             sha256sum --check DE.tab.sha256 \
-              && echo "::set-output name=UPDATE_FLAG::{{ null }}"
+              || echo "::set-output name=UPDATE_FLAG::{{ true }}"
               #&& echo "UPDATE_FLAG=${{ true }}" >> GITHUB_ENV
       - name: Restore hash
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
         run: |
           #sha256sum tmp/DE.tab > DE.tab.sha256
-          echo "steps.update_check.outputs.UPDATE_FLAG"
+          echo "${{ steps.update_check.outputs.UPDATE_FLAG }}"
       - name: Upload data file
         #if: ${{ job.update.env.UPDATE_FLAG }}
         if: ${{ false }}
