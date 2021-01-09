@@ -22,15 +22,9 @@ jobs:
         run: |
             #sha256sum --check --status ../DE.tab.sha256 \
             sha256sum --check DE.tab.sha256 \
-              || echo "::set-output name=UPDATE_FLAG::{{ true }}"
+              && echo "::set-output name=UPDATE_FLAG::{{ true }}"
             echo "${{ steps.update_check.outputs.UPDATE_FLAG }}"
-      - name: Restore hash
-        if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
-        working-directory: 'data'
-        run: |
-          #sha256sum tmp/DE.tab > DE.tab.sha256
-          echo RUNNING...
-      - name: Upload data file
+      - name: Upload data file (artifact)
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         uses: actions/upload-artifact@v2
         with:
@@ -43,13 +37,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      #- name: Download data file (artifact)
+        #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
+        #uses: actions/download-artifact@v2
+        #id: download_artifact
+        #with:
+          #name: plz-data
+          #path: 'data/tmp'
       - name: Start build
         #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
+        working-directory: 'data'
         run: |
             echo "Beginning of build job..."
             ls -R data
-
-      #- name: Push checksum
+      #- name: Generate checksum
+        #if: ${{ success() }}
+        #working-directory: 'data'
+        #run: |
+          #sha256sum tmp/DE.tab > DE.tab.sha256
+      #- name: Push changes
         #run: |
           #git config --global user.name "github-actions[bot]"
           #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
