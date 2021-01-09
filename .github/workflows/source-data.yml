@@ -9,7 +9,7 @@ jobs:
     env:
       UPDATE_FLAG: false
     #outputs:
-      #need-update: ${{ jobs.update.env.UPDATE_FLAG }}
+      #need-update: ${{ job.update.env.UPDATE_FLAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
             sha256sum --check DE.tab.sha256 \
               || UPDATE_FLAG=${{ true }}
       - name: Restore hash
-        if: $UPDATE_FLAG
+        if: ${{ job.update.env.UPDATE_FLAG }}
         working-directory: 'data'
         run: |
           #sha256sum tmp/DE.tab > DE.tab.sha256
