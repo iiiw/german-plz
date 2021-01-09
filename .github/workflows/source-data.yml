@@ -6,8 +6,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    env:
-      UPDATE_FLAG: false
+    #env:
+      #UPDATE_FLAG: false
     #outputs:
       #need-update: ${{ job.update.env.UPDATE_FLAG }}
     steps:
@@ -26,16 +26,16 @@ jobs:
         run: |
             #sha256sum --check --status ../DE.tab.sha256 \
             sha256sum --check DE.tab.sha256 \
-              && UPDATE_FLAG=${{ true }}
+              && echo "UPDATE_FLAG=${{ true }}" >> GITHUB_ENV
       - name: Restore hash
-        if: ${{ job.update.env.UPDATE_FLAG }}
+        if: $UPDATE_FLAG
         working-directory: 'data'
         run: |
           #sha256sum tmp/DE.tab > DE.tab.sha256
-            echo "UPDATE_FLAG (bare) set to: $UPDATE_FLAG"
+          echo "env var set to: $UPDATE_FLAG"
       - name: Upload data file
+        #if: ${{ job.update.env.UPDATE_FLAG }}
         if: ${{ false }}
-        #if: ${{ UPDATE_FLAG }}
         uses: actions/upload-artifact@v2
         with:
           name: plz-data
