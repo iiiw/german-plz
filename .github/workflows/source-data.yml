@@ -6,6 +6,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    outputs:
+      need-update: ${{ steps.update_check.outputs.UPDATE_FLAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,7 +35,7 @@ jobs:
   build:
     needs: update
     runs-on: ubuntu-latest
-    if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
+    if: ${{ needs.update.outputs.need-update }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
