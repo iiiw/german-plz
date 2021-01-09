@@ -6,10 +6,10 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
-    outputs:
-      need-update: ${{ $UPDATE_FLAG }}
     env:
       UPDATE_FLAG: false
+    outputs:
+      need-update: ${{ $UPDATE_FLAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
