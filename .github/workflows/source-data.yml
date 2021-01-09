@@ -26,7 +26,7 @@ jobs:
         run: |
             #sha256sum --check --status ../DE.tab.sha256 \
             sha256sum --check DE.tab.sha256 \
-              || UPDATE_FLAG=${{ true }}
+              && UPDATE_FLAG=${{ true }}
       - name: Restore hash
         if: ${{ job.update.env.UPDATE_FLAG }}
         working-directory: 'data'
