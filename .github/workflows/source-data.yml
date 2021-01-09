@@ -23,12 +23,13 @@ jobs:
             #sha256sum --check --status ../DE.tab.sha256 \
             sha256sum --check DE.tab.sha256 \
               || echo "::set-output name=UPDATE_FLAG::{{ true }}"
+            echo "${{ steps.update_check.outputs.UPDATE_FLAG }}"
       - name: Restore hash
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
         run: |
           #sha256sum tmp/DE.tab > DE.tab.sha256
-          echo "${{ steps.update_check.outputs.UPDATE_FLAG }}"
+          echo RUNNING...
       - name: Upload data file
         if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
         uses: actions/upload-artifact@v2
@@ -36,15 +37,18 @@ jobs:
           name: plz-data
           path: "${{ steps.download.outputs.file-path }}"
           retention-days: 1
-      #- name: Push hash
-        ## actually, this should run at the very end, when the build succeeds
-        #if: ${{ steps.update_check.outputs.UPDATE_FLAG }}
+  build:
+    needs: update
+    steps:
+      - name: Start build
+        #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
+        run: echo "Beginning of build job..."
+      #- name: Push checksum
         #run: |
           #git config --global user.name "github-actions[bot]"
           #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          #git add data/DE.tab.sha256
-          #git commit -m 'Regenerate checksum file'
+          #git add data/DE.tab.sha256 german-plz/0.2.0/package.yml
+          #git commit -m 'Autogenerate package.yml and add checksum for source data'
           #git push
         #with:
           #github_token: ${{ secrets.GITHUB_TOKEN }}
-
