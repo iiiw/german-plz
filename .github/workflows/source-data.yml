@@ -33,22 +33,21 @@ jobs:
   build:
     needs: update
     runs-on: ubuntu-latest
+    if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       #- name: Download data file (artifact)
-        #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
         #uses: actions/download-artifact@v2
         #id: download_artifact
         #with:
           #name: plz-data
           #path: 'data/tmp'
       - name: Start build
-        #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
         working-directory: 'data'
         run: |
             echo "Beginning of build job..."
-            ls -R data
+            ls -R 
       #- name: Generate checksum
         #if: ${{ success() }}
         #working-directory: 'data'
