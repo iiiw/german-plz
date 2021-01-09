@@ -28,11 +28,11 @@ jobs:
             sha256sum --check DE.tab.sha256 \
               || UPDATE_FLAG=${{ true }}
       - name: Restore hash
-        if: ${{ jobs.update.env.UPDATE_FLAG }}
+        if: $UPDATE_FLAG
         working-directory: 'data'
         run: |
           #sha256sum tmp/DE.tab > DE.tab.sha256
-            echo "UPDATE_FLAG (jobs.env) set to: ${{ jobs.update.env.UPDATE_FLAG }}"
+            #echo "UPDATE_FLAG (jobs.env) set to: ${{ jobs.update.env.UPDATE_FLAG }}"
             echo "UPDATE_FLAG (bare) set to: $UPDATE_FLAG"
       - name: Upload data file
         if: ${{ false }}
