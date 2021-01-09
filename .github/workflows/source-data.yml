@@ -39,6 +39,7 @@ jobs:
           retention-days: 1
   build:
     needs: update
+    runs-on: ubuntu-latest
     steps:
       - name: Start build
         #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
