@@ -9,7 +9,7 @@ jobs:
     env:
       UPDATE_FLAG: false
     outputs:
-      need-update: ${{ $UPDATE_FLAG }}
+      need-update: ${{ jobs.update.env.UPDATE_FLAG }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
