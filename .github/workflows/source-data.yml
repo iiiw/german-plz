@@ -41,6 +41,8 @@ jobs:
     needs: update
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Start build
         #if: ${{ jobs.update.steps.update_check.outputs.UPDATE_FLAG }}
         run: |
